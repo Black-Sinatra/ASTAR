@@ -55,7 +55,7 @@ public class example {
     }
     
     public static void main(String[] args) {
-        File file = new File("C:\\Users\\HARFOE\\Documents\\CMM512\\RoadExample\\highway-maxspeed.roads");
+        File file = new File("C:\\Users\\HARFOE\\Documents\\NetBeansProjects\\RoadExample\\highway-maxspeed.roads");
         System.out.println(file.getAbsoluteFile().toString());
         Graph<GeoLocation, RoadEdge> roadGraph;
         try {
@@ -82,7 +82,9 @@ public class example {
         
         long now = System.nanoTime();
         
+//        astarex algorithm = new astarex();
         RoutingAlgorithm<Distance> algorithm = new astarex();
+        
         List<GeoLocation> travel1;
         
         try {

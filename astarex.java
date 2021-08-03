@@ -21,42 +21,40 @@ import rgu.transport.geospatial.GeoLocation;
  */
 public class astarex implements RoutingAlgorithm<Distance> {
     
+    public astarex(){
+    }
+    
     @Override
     @SuppressWarnings("unchecked")
     public <V> List<V> path(Explorable<V, Distance> graph, V source, V target) throws TargetUnreachableException, InterruptedException {
-        if (target instanceof GeoLocation) {
+//        if (target instanceof GeoLocation) {
             List<GeoLocation> rv = geoLocationPath((Explorable<GeoLocation, Distance>) graph, (GeoLocation) source, (GeoLocation) target);
             return (List<V>) rv;
-        } else {
-            throw new IllegalArgumentException();
-        }
+//        } else {
+//            throw new IllegalArgumentException();
+//        }
     }
     
-    private List<GeoLocation> geoLocationPath(Explorable<GeoLocation, Distance> graph, GeoLocation source, GeoLocation target) throws TargetUnreachableException, InterruptedException{
+    private List<GeoLocation> geoLocationPath(Explorable<GeoLocation, Distance> graphstar, GeoLocation source, GeoLocation target) throws TargetUnreachableException, InterruptedException{
         
-        MinHeap<GeoLocation, Distance> OPEN = new BinaryMinHeap<>((a, b) -> { return a.compareTo(b) < 0; });
-        System.out.println(OPEN);
-        Set<GeoLocation> CLOSED = new HashSet<>();
-        System.out.println(CLOSED);
+        MinHeap<GeoLocation, Distance> OPEN = new BinaryMinHeap<>((a, b) -> { return a.compareTo(b) < 0; });        
+        Set<GeoLocation> CLOSED = new HashSet<>();       
         Map<GeoLocation, Distance> DISTANCE = new HashMap<>();
-        System.out.println(DISTANCE);
         Map<GeoLocation, GeoLocation> PARENTS = new HashMap<>();
-        System.out.println(PARENTS);
+        
         
         OPEN.addElement(source, Distance.ofMeters(0.0));
-        System.out.println(OPEN);
         DISTANCE.put(source, Distance.ofMeters(0.0));
-        System.out.println(DISTANCE);
         PARENTS.put(source, null);
-        System.out.println(PARENTS);
+
         
         
         while (!OPEN.isEmpty()) {
             GeoLocation currentNode = OPEN.deleteMinimum();
-            System.out.println("Current Node is: " + currentNode);
+//            System.out.println("Current Node is: " + currentNode);
             
             if (currentNode.equals(target)) {
-                return tracebackPath(currentNode, PARENTS);
+                return tracebackPath(currentNode, PARENTS); 
             }
             
             if (CLOSED.contains(currentNode)) {
@@ -65,24 +63,24 @@ public class astarex implements RoutingAlgorithm<Distance> {
             
             CLOSED.add(currentNode);
             
-            Set<GeoLocation> neighbors = graph.neighbours(currentNode);
+            Set<GeoLocation> neighbors = graphstar.neighbours(currentNode);
             
             for (GeoLocation childNode : neighbors) {
-                System.out.println("Neighbors: " + childNode);
+//                System.out.println("Neighbors: " + childNode);
                 if (CLOSED.contains(childNode)) {
                     continue;
                 } 
+               
                 
-                Distance tentativeDistance = Distance.ofMeters(graph.edge(currentNode, currentNode).asMeters() + graph.edge(currentNode, childNode).asMeters());
-                System.out.println("Tentative Distance: " + tentativeDistance);
+                Distance tentativeDistance = Distance.ofMeters(DISTANCE.get(currentNode).asMeters() + 
+                        graphstar.edge(currentNode, childNode).asMeters());
           
-                if (!DISTANCE.containsKey(childNode) || DISTANCE.get(childNode).asMeters() > tentativeDistance.asMeters()) {
+                if (!DISTANCE.containsKey(childNode) || DISTANCE.get(childNode).asMeters() > 
+                        tentativeDistance.asMeters()) {
                     DISTANCE.put(childNode, tentativeDistance);
-                    System.out.println("Traceback path: " + DISTANCE);
                     PARENTS.put(childNode, currentNode);
-                    System.out.println("Traceback path: " + PARENTS);
-                    OPEN.addElement(childNode, Distance.ofMeters(tentativeDistance.asMeters() + graph.edge(childNode, target).asMeters()));
-                    System.out.println("Traceback path: " + OPEN);
+                    OPEN.addElement(childNode, Distance.ofMeters(tentativeDistance.asMeters() + 
+                            GeoLocation.HAVERSINE.distance(childNode, target).asMeters()));
                 }
             }
         }
