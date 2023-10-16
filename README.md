@@ -33,7 +33,7 @@ Key features of this Java project include:
 
 ## Algorithm Comparison
 
-We conduct a thorough comparison of the A* algorithm and Dijkstra's algorithm to evaluate their performance, accuracy, and suitability for route planning in public transport schedules. The comparison results are documented in our project.
+We conduct a comparison of the A* algorithm and Dijkstra's algorithm to evaluate their performance, accuracy, and suitability for route planning in public transport schedules. The comparison results are documented in our project.
 
 ## ATCO-CIF to GTFS Converter
 
