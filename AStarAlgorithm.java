@@ -19,9 +19,9 @@ import rgu.transport.geospatial.GeoLocation;
  *
  * @author HARFOE
  */
-public class astarex implements RoutingAlgorithm<Distance> {
+public class AStarAlgorithm implements RoutingAlgorithm<Distance> {
     
-    public astarex(){
+    public AStarAlgorithm(){
     }
     
     @Override
