@@ -14,7 +14,7 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 
-public class RoadExample {
+public class DijkstraAlgorithm {
 
     public static void main(String[] args) throws IOException {
 
